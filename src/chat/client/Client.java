@@ -1,16 +1,16 @@
 package chat.client;
 
-import chat.Connection;
-import chat.ConsoleHelper;
-import chat.Message;
-import chat.MessageType;
+import chat.util.Connection;
+import chat.util.ConsoleHelper;
+import chat.util.Message;
+import chat.util.MessageType;
 
 import java.io.IOException;
 import java.net.Socket;
 
 
 public class Client {
-//1
+
     protected Connection connection;
     private volatile boolean clientConnected = false;
 
