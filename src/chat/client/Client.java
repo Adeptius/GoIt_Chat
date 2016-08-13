@@ -61,7 +61,10 @@ public class Client {
                     informAboutAddingNewUser(message.getData());
                 }else if (message.getType() == MessageType.SEND_FILE){
                     processIncomingMessage(message.getData());
-                    Files.copy(new ByteArrayInputStream(message.getBytesArray()), Paths.get("C:\\ReceivedFiles\\" + message.getFileName()));
+                    Files.copy(new ByteArrayInputStream(message.getBytesArray()),
+                            Paths.get("C:\\ReceivedFiles\\" + message.getFileName()),
+                            StandardCopyOption.REPLACE_EXISTING);
+
                 }else throw new IOException("Unexpected MessageType");
             }
         }

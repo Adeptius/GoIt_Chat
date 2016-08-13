@@ -4,9 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.nio.file.Paths;
 
-public class ClientGuiView {
+public class ClientGuiView implements ActionListener{
 
     private final ClientGuiController controller;
 
@@ -14,6 +15,8 @@ public class ClientGuiView {
     private JTextField textField = new JTextField(50);
     private JTextArea messages = new JTextArea(10, 50);
     private JTextArea users = new JTextArea(10, 10);
+    private JButton fileChooseButton = new JButton();
+    private  JFileChooser jFileChooser = new JFileChooser();
 
     public ClientGuiView(ClientGuiController controller) {
         this.controller = controller;
@@ -24,10 +27,22 @@ public class ClientGuiView {
         textField.setEditable(false);
         messages.setEditable(false);
         users.setEditable(false);
+        messages.setDragEnabled(true);
+        jFileChooser.addActionListener(this);
+
+        fileChooseButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jFileChooser.showOpenDialog(jFileChooser);
+
+            }
+        });
+
 
         frame.getContentPane().add(textField, BorderLayout.NORTH);
         frame.getContentPane().add(new JScrollPane(messages), BorderLayout.WEST);
         frame.getContentPane().add(new JScrollPane(users), BorderLayout.EAST);
+        frame.getContentPane().add(fileChooseButton, BorderLayout.SOUTH);
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
@@ -45,6 +60,20 @@ public class ClientGuiView {
                 textField.setText("");
             }
         });
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // если файл выбран
+
+
+        System.out.println("файл выбран");
+            File file = jFileChooser.getSelectedFile();
+            controller.sendFile(file.toPath());
+
+
+
+
     }
 
     public String getServerAddress() {
