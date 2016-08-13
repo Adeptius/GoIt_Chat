@@ -72,41 +72,41 @@ public class ClientGuiView implements ActionListener{
     }
 
     public String getServerAddress() {
-        return "localhost";
-//        return JOptionPane.showInputDialog(
-//                frame,
-//                "Введите адрес сервера:",
-//                "Конфигурация клиента",
-//                JOptionPane.QUESTION_MESSAGE);
+//        return "localhost";
+        return JOptionPane.showInputDialog(
+                frame,
+                "Введите адрес сервера:",
+                "Конфигурация клиента",
+                JOptionPane.QUESTION_MESSAGE);
     }
 
     public int getServerPort() {
-        return 8888;
-//        while (true) {
-//            String port = JOptionPane.showInputDialog(
-//                    frame,
-//                    "Введите порт сервера:",
-//                    "Конфигурация клиента",
-//                    JOptionPane.QUESTION_MESSAGE);
-//            try {
-//                return Integer.parseInt(port.trim());
-//            } catch (Exception e) {
-//                JOptionPane.showMessageDialog(
-//                        frame,
-//                        "Был введен некорректный порт сервера. Попробуйте еще раз.",
-//                        "Конфигурация клиента",
-//                        JOptionPane.ERROR_MESSAGE);
-//            }
-//        }
+//        return 8888;
+        while (true) {
+            String port = JOptionPane.showInputDialog(
+                    frame,
+                    "Введите порт сервера:",
+                    "Конфигурация клиента",
+                    JOptionPane.QUESTION_MESSAGE);
+            try {
+                return Integer.parseInt(port.trim());
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(
+                        frame,
+                        "Был введен некорректный порт сервера. Попробуйте еще раз.",
+                        "Конфигурация клиента",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
     public String getUserName() {
-        return "test";
-//        return JOptionPane.showInputDialog(
-//                frame,
-//                "Введите ваше имя:",
-//                "Конфигурация клиента",
-//                JOptionPane.QUESTION_MESSAGE);
+//        return "test";
+        return JOptionPane.showInputDialog(
+                frame,
+                "Введите ваше имя:",
+                "Конфигурация клиента",
+                JOptionPane.QUESTION_MESSAGE);
     }
 
     public void notifyConnectionStatusChanged(boolean clientConnected) {
