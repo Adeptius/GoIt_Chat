@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ClientGuiView {
+    //1
     private final ClientGuiController controller;
 
     private JFrame frame = new JFrame("Чат");
