@@ -10,7 +10,7 @@ import java.net.Socket;
 
 
 public class Client {
-
+//1
     protected Connection connection;
     private volatile boolean clientConnected = false;
 
