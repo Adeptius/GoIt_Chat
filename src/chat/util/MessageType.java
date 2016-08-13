@@ -9,4 +9,5 @@ public enum MessageType {
     TEXT,
     USER_ADDED,
     USER_REMOVED,
+    SEND_FILE,
 }

@@ -5,14 +5,16 @@ import chat.util.ConsoleHelper;
 import chat.util.Message;
 import chat.util.MessageType;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.nio.file.*;
 
 
 public class Client {
 
     protected Connection connection;
-    private volatile boolean clientConnected = false;
+    private volatile boolean clientConnected;
 
     public class SocketThread extends Thread {
         protected void processIncomingMessage(String message){
@@ -42,7 +44,11 @@ public class Client {
                 else if (message.getType() == MessageType.NAME_ACCEPTED) {
                     notifyConnectionStatusChanged(true);
                     return;
-                }else throw new IOException("Unexpected MessageType");
+                }else if(message.getType() == MessageType.SEND_FILE){
+                    ConsoleHelper.writeMessage("Входяший файл: " + message.getFileName());
+                }else {
+                    throw new IOException("Unexpected MessageType");
+                }
             }
         }
 
@@ -53,8 +59,9 @@ public class Client {
                     processIncomingMessage(message.getData());
                 }else if (message.getType() == MessageType.USER_ADDED){
                     informAboutAddingNewUser(message.getData());
-                }else if (message.getType() == MessageType.USER_REMOVED){
-                    informAboutDeletingNewUser(message.getData());
+                }else if (message.getType() == MessageType.SEND_FILE){
+                    processIncomingMessage(message.getData());
+                    Files.copy(new ByteArrayInputStream(message.getBytesArray()), Paths.get("C:\\ReceivedFiles\\" + message.getFileName()));
                 }else throw new IOException("Unexpected MessageType");
             }
         }
@@ -67,6 +74,8 @@ public class Client {
                 clientHandshake();
                 clientMainLoop();
             } catch (Exception e) {
+                e.printStackTrace();
+                ConsoleHelper.writeMessage("Вылетел цикл клиента!");
                 notifyConnectionStatusChanged(false);
             }
         }
@@ -101,6 +110,21 @@ public class Client {
     protected void sendTextMessage(String text) {
         try {
             connection.send(new Message(MessageType.TEXT, text));
+        } catch (IOException e) {
+            clientConnected = false;
+            ConsoleHelper.writeMessage("Ошибка отправки сообщения");
+        }
+    }
+
+    protected void sendFile(Path path) {
+        System.out.println(path);
+
+        try {
+            byte[] bytes = Files.readAllBytes(path);
+            connection.send(new Message(MessageType.SEND_FILE,
+                    "",
+                    bytes,
+                    path.getFileName().toString()));
         } catch (IOException e) {
             clientConnected = false;
             ConsoleHelper.writeMessage("Ошибка отправки сообщения");

@@ -27,18 +27,18 @@ public class Server {
             ConsoleHelper.writeMessage("Установлено удаленное соединение с "
                     + socket.getRemoteSocketAddress());
             String userName = null;
-            try (Connection connection = new Connection(socket)) {
+            try ( Connection connection = new Connection(socket)) {
                 userName = serverHandshake(connection);
                 sendBroadcastMessage(new Message(MessageType.USER_ADDED, userName));
                 sendListOfUsers(connection, userName);
                 serverMainLoop(connection, userName);
-            } catch (Exception e) {
+            } catch (IOException | ClassNotFoundException e) {
                 ConsoleHelper.writeMessage(
                         "произошла ошибка при обмене данными с удаленным адресом");
+                connectionMap.remove(userName);
+                sendBroadcastMessage(new Message(MessageType.USER_REMOVED, userName));
+                ConsoleHelper.writeMessage("Connection with remote socket address closed.");
             }
-            connectionMap.remove(userName);
-            sendBroadcastMessage(new Message(MessageType.USER_REMOVED, userName));
-            ConsoleHelper.writeMessage("Connection with remote socket address closed.");
         }
 
         private String serverHandshake(Connection connection)
@@ -74,7 +74,11 @@ public class Server {
                     Message messageForAll = new Message(MessageType.TEXT,
                             userName + ": " + message.getData());
                     sendBroadcastMessage(messageForAll);
-                } else ConsoleHelper.writeMessage("Ошибка");
+                } else if (message.getType() == MessageType.SEND_FILE){
+                    Message messageForAll = new Message(MessageType.SEND_FILE,
+                            userName + ": отправил файл " + message.getFileName(), message.getBytesArray(), message.getFileName());
+                    sendBroadcastMessage(messageForAll);
+                }
 
             }
         }
@@ -92,7 +96,7 @@ public class Server {
     }
 
     public static void main(String[] args) {
-        try (ServerSocket serverSocket = new ServerSocket(7777)) { // ConsoleHelper.readInt()
+        try (ServerSocket serverSocket = new ServerSocket(8888)) { // ConsoleHelper.readInt()
             ConsoleHelper.writeMessage("Сервер запущен.");
             while (true) {
                 Handler handler = new Handler(serverSocket.accept());

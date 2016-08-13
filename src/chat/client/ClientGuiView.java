@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.nio.file.Paths;
 
 public class ClientGuiView {
 
@@ -33,45 +34,55 @@ public class ClientGuiView {
 
         textField.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                controller.sendTextMessage(textField.getText());
+                if(textField.getText().startsWith("File:")){
+                    String filePath = textField.getText().substring(6);
+                    System.out.println(filePath);
+                    controller.sendFile(Paths.get(filePath));
+
+                }else{
+                    controller.sendTextMessage(textField.getText());
+                }
                 textField.setText("");
             }
         });
     }
 
     public String getServerAddress() {
-        return JOptionPane.showInputDialog(
-                frame,
-                "Введите адрес сервера:",
-                "Конфигурация клиента",
-                JOptionPane.QUESTION_MESSAGE);
+        return "localhost";
+//        return JOptionPane.showInputDialog(
+//                frame,
+//                "Введите адрес сервера:",
+//                "Конфигурация клиента",
+//                JOptionPane.QUESTION_MESSAGE);
     }
 
     public int getServerPort() {
-        while (true) {
-            String port = JOptionPane.showInputDialog(
-                    frame,
-                    "Введите порт сервера:",
-                    "Конфигурация клиента",
-                    JOptionPane.QUESTION_MESSAGE);
-            try {
-                return Integer.parseInt(port.trim());
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(
-                        frame,
-                        "Был введен некорректный порт сервера. Попробуйте еще раз.",
-                        "Конфигурация клиента",
-                        JOptionPane.ERROR_MESSAGE);
-            }
-        }
+        return 8888;
+//        while (true) {
+//            String port = JOptionPane.showInputDialog(
+//                    frame,
+//                    "Введите порт сервера:",
+//                    "Конфигурация клиента",
+//                    JOptionPane.QUESTION_MESSAGE);
+//            try {
+//                return Integer.parseInt(port.trim());
+//            } catch (Exception e) {
+//                JOptionPane.showMessageDialog(
+//                        frame,
+//                        "Был введен некорректный порт сервера. Попробуйте еще раз.",
+//                        "Конфигурация клиента",
+//                        JOptionPane.ERROR_MESSAGE);
+//            }
+//        }
     }
 
     public String getUserName() {
-        return JOptionPane.showInputDialog(
-                frame,
-                "Введите ваше имя:",
-                "Конфигурация клиента",
-                JOptionPane.QUESTION_MESSAGE);
+        return "test";
+//        return JOptionPane.showInputDialog(
+//                frame,
+//                "Введите ваше имя:",
+//                "Конфигурация клиента",
+//                JOptionPane.QUESTION_MESSAGE);
     }
 
     public void notifyConnectionStatusChanged(boolean clientConnected) {
