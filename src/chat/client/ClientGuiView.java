@@ -29,6 +29,8 @@ public class ClientGuiView implements ActionListener{
         users.setEditable(false);
         messages.setDragEnabled(true);
         jFileChooser.addActionListener(this);
+        fileChooseButton.setSize(300,40);
+        fileChooseButton.setText("Отправить файл всем учасникам");
 
         fileChooseButton.addActionListener(new ActionListener() {
             @Override
@@ -65,15 +67,8 @@ public class ClientGuiView implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         // если файл выбран
-
-
-        System.out.println("файл выбран");
             File file = jFileChooser.getSelectedFile();
             controller.sendFile(file.toPath());
-
-
-
-
     }
 
     public String getServerAddress() {
