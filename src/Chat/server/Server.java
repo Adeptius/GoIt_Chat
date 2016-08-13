@@ -92,7 +92,7 @@ public class Server {
     }
 
     public static void main(String[] args) {
-        try (ServerSocket serverSocket = new ServerSocket(ConsoleHelper.readInt())) {
+        try (ServerSocket serverSocket = new ServerSocket(7777)) { // ConsoleHelper.readInt()
             ConsoleHelper.writeMessage("Сервер запущен.");
             while (true) {
                 Handler handler = new Handler(serverSocket.accept());
